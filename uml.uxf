@@ -1,0 +1,36 @@
+<diagram program="umletino" version="15.1"><zoom_level>8</zoom_level><element><id>UMLClass</id><coordinates><x>391</x><y>464</y><w>176</w><h>88</h></coordinates><panel_attributes>_Modifier_
+--
++ on_card_scored(context, card)
++ on_card_held(context, card)
++ on_hand_scored(context, card)
+
++ retriggers(context, card) -&gt; int</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>519</x><y>632</y><w>96</w><h>24</h></coordinates><panel_attributes>Joker
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>343</x><y>632</y><w>96</w><h>24</h></coordinates><panel_attributes>Enhancement</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>191</x><y>632</y><w>96</w><h>24</h></coordinates><panel_attributes>Edition</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>39</x><y>632</y><w>96</w><h>24</h></coordinates><panel_attributes>Seal</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>383</x><y>544</y><w>112</w><h>104</h></coordinates><panel_attributes>lt=-&gt;&gt;</panel_attributes><additional_attributes>10;110;10;60;120;60;120;10</additional_attributes></element><element><id>Relation</id><coordinates><x>231</x><y>544</y><w>264</w><h>104</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;110;10;60;310;60;310;10</additional_attributes></element><element><id>Relation</id><coordinates><x>79</x><y>544</y><w>416</w><h>104</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>10;110;10;60;500;60;500;10</additional_attributes></element><element><id>Relation</id><coordinates><x>471</x><y>544</y><w>112</w><h>104</h></coordinates><panel_attributes>lt=-</panel_attributes><additional_attributes>120;110;120;60;10;60;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>391</x><y>256</y><w>176</w><h>128</h></coordinates><panel_attributes>_ScoreContext_
+--
++ chips : int
++ mult : int
++ money : int
+-
++ add_chips(n)
++ add_mult(n)
++ add_money(n)
+
++ x_mult(n)</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>471</x><y>376</y><w>72</w><h>104</h></coordinates><panel_attributes>lt=&lt;&lt;.
+Calls hooks</panel_attributes><additional_attributes>10;110;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>103</x><y>56</y><w>176</w><h>128</h></coordinates><panel_attributes>_Card_
+--
++ rank : int
++ suit : int
++ enhancement : Enhancement
++ edition : Edition
++ seal : Seal
+-
++ get_rank_name() -&gt; str
++ get_suit_name() -&gt; str</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>183</x><y>176</y><w>224</w><h>360</h></coordinates><panel_attributes>lt=&lt;-
+m1=0..3</panel_attributes><additional_attributes>260;420;10;420;10;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>391</x><y>56</y><w>176</w><h>128</h></coordinates><panel_attributes>_PlayedHand_
+--
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>471</x><y>176</y><w>40</w><h>96</h></coordinates><panel_attributes>lt=&lt;-
+m1=1..1</panel_attributes><additional_attributes>10;10;10;100</additional_attributes></element><element><id>Relation</id><coordinates><x>271</x><y>112</y><w>136</w><h>32</h></coordinates><panel_attributes>lt=&lt;-
+m1=1..5</panel_attributes><additional_attributes>10;10;150;10</additional_attributes></element><element><id>UMLClass</id><coordinates><x>679</x><y>56</y><w>176</w><h>128</h></coordinates><panel_attributes>_HandType_
+--
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>559</x><y>112</y><w>136</w><h>32</h></coordinates><panel_attributes>lt=&lt;-
+m1=1..1</panel_attributes><additional_attributes>150;10;10;10</additional_attributes></element></diagram>
