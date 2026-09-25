@@ -45,10 +45,3 @@ class Card:
 
 	def modifiers(self):
 		return [m for m in (self.enhancement, self.edition, self.seal) if m]
-
-
-ten_of_spades = Card(10, Card.SPADES)
-print(ten_of_spades)
-
-king_of_hearts = Card(13, Card.HEARTS)
-print(king_of_hearts)
