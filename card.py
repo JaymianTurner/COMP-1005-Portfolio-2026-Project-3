@@ -6,17 +6,13 @@ class Card:
 
 	# Convert numeric values of card's rank to string.
 	RANK_NAME : dict[int, str] = {
-		# Number ranks
-		1 : "Ace", 2 : "Two", 3 : "Three", 4 : "Four", 5 : "Five",
-		6 : "Six", 7 : "Seven", 8 : "Eight", 9 : "Nine", 10 : "Ten",
-		# Face ranks
-		11 : "Jack", 12 : "Queen", 13 : "King"
+		11 : "J", 12 : "Q", 13 : "K", 14 : "A",
 	}
 
 	# Convert numeric values of card's suit to string.
 	SUIT_NAME : dict[int, str] = {
-		1 : "Spades", 2 : "Clubs", # Black suites
-		3 : "Hearts", 4 : "Diamonds" # Red suites
+		1 : "♠", 2 : "♣", # Black suites
+		3 : "♥", 4 : "♦" # Red suites
 	}
 
 
@@ -29,7 +25,8 @@ class Card:
 		self.seal = seal
 
 	def __str__(self):
-		return f"{self.RANK_NAME[self.rank]} of {self.SUIT_NAME[self.suit]}"
+		rank_name = self.rank if self.rank < 11 else self.RANK_NAME[self.rank]
+		return f"{rank_name}{self.SUIT_NAME[self.suit]}"
 
 	def get_rank_name(self) -> str:
 		# Get name of card's rank.

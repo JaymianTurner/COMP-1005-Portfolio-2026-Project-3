@@ -25,7 +25,7 @@ class HandType:
 
 	
 class HighCard(HandType):
-	name, base_chips, base_mult = "High Card" , 5, 1
+	name, base_chips, base_mult = "High Card", 5, 1
 	level_chips, level_mult = 10, 1
 
 	def evaluate(cards : list[Card]) -> list[Card] | None:
