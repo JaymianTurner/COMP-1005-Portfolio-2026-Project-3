@@ -1,4 +1,5 @@
 from card import Card
+import hand_types
 import random
 
 class Deck:
@@ -39,48 +40,55 @@ class Deck:
 
 class Hand:
 	def __init__(self, deck : Deck):
-		self.cards : list[Card] = []
-		self.hand_size = 8
+		self.__cards : list[Card] = []
+		self.__hand_size = 8
 
 		self.deck = deck
 
 	def __str__(self):
 		string = f""
-		for card in self.cards:
+		for card in self.__cards:
 			string += f"{card} "
 		return string
 
+	def get_cards(self) -> list[Card]: return self.__cards
+	cards = property(get_cards)
+
+	def get_scoring_cards(self) -> list[Card]: return self.__scoring_cards
+	scoring_cards = property(get_scoring_cards)
+
+	def get_hand_size(self) -> int: return self.__hand_size
+	hand_size = property(get_hand_size)
+	
+
 	def discard(self, index):
-		if index < 0 or index > len(self.cards):
+		if index < 0 or index > len(self.__cards):
 			return
-		self.deck.discard_pile.append(self.cards.pop(index))
+		self.deck.discard_pile.append(self.__cards.pop(index))
 
 		self.fill_hand()
 
-
 	def fill_hand(self):
-		for i in range(8 - len(self.cards)):
-			self.cards.append(self.deck.deal_card())
+		for i in range(8 - len(self.__cards)):
+			self.__cards.append(self.deck.deal_card())
+
+	def sort_rank(self):
+		self.__cards.sort(key=lambda x: x.rank, reverse=True)
 
 	def empty(self):
-		self.cards = []
+		self.__cards = []
 
-deck = Deck()
+	def evaluate(self):
 
-print(deck)
+		if self.__cards == []: return
 
-deck.shuffle()
+		scoring_cards = None
+		best_hand_type = None
+		for hand_type in hand_types.HandType.__subclasses__():
+			eval = hand_type.evaluate(self.__cards)
+			if eval != None:
+				scoring_cards = eval
+				best_hand_type = hand_type
 
-hand = Hand(deck)
-
-hand.fill_hand()
-
-print(hand)
-
-hand.discard(3)
-print(hand)
-
-print(deck)
-hand.empty()
-deck.restore()
-print(deck)
+		print(scoring_cards)
+		print(best_hand_type)

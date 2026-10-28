@@ -1,41 +1,61 @@
 from score_context import ScoreContext
+from card import Card
 
 class ScoringEngine:
 	@staticmethod
-	def score_hand(context : ScoreContext) -> int:
+	def score_hand(ctx : ScoreContext) -> int:
 
-		# Loop through all scoring cards in hand dealt from left -> right.
-		for card in context.hand.scoring_cards:
+		ctx.source = None
+		ctx.emit("hand")
 
-			# Loop through all jokers to find if any activate retriggers for selected card.
-			# e.g. Hanging Chad retriggers first card 2 times.
-			triggers = 1 + sum(j.retriggers(context, card) for j in context.jokers)
+		for card in ctx.scoring_cards:
+			ScoringEngine.__trigger(ctx, card, ScoringEngine.__score_card, "retriggers")
 
-			# Score card for amount of triggers.
-			for _ in range(triggers):
-				# Add base card chips.
-				context.add_chips(card.base_chips)
+		for card in ctx.held_cards:
+			ScoringEngine.__trigger(ctx, card, ScoringEngine.__hold_card, "held_retriggers")
 
-				# Loop through modifiers that card has. 
-				# (enhancement -> edition -> seal)
-				for m in card.modifiers():
-					# TODO: Figure out elegant implementation for red seals.
-					# Also, try and figure out how planet/tarot cards can be created.
-					m.on_card_scored(context, card)
+		for j in ctx.jokers:
+			ctx.source = j
+			j.on_hand_scored(ctx)
 
-				# Loop through all jokers to check if they trigger from
-				# this card being scored (left -> right).
-				for j in context.jokers:
-					j.on_card_scored(context, card)
+		ctx.source = None
+		return int(ctx.chips * ctx.mult)
 
-		for card in context.hand.held_cards:
-			for m in card.modifiers():
-				m.on_card_held(context, card)
-			for j in context.jokers:
-				j.on_card_held(context, card)
+		
 
-		for j in context.jokers:
-			j.on_hand_scored(context)
+	@staticmethod
+	def __trigger(ctx, card, effect, retrigger_method : str):
+		retriggers = []
+		for m in card.modifiers():
+			retriggers += [card] * getattr(m, retrigger_method)(ctx, card)
+		for j in ctx.jokers:
+			retriggers += [j] * getattr(j, retrigger_method)(ctx, card)
 
-		return context.chips * context.mult
-				
+		effect(ctx, card)
+		for i in retriggers:
+			ctx.source = i
+			ctx.emit("retrigger")
+			effect(ctx, card)
+
+	@staticmethod
+	def __score_card(ctx : ScoreContext, card : Card):
+
+		ctx.source = card
+		ctx.add_chips(card.base_chips)
+
+		for m in card.modifiers():
+			ctx.source = card
+			m.on_card_scored(ctx, card)
+
+		for j in ctx.jokers:
+			ctx.source = j
+			j.on_card_scored(ctx, card)
+
+	@staticmethod
+	def __hold_card(ctx : ScoreContext, card):
+		for m in card.modifiers():
+			ctx.source = card
+			m.on_card_held(ctx, card)
+		for j in ctx.jokers:
+			ctx.source = j
+			j.on_card_held(ctx, card)

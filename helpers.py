@@ -24,6 +24,17 @@ def group_by_rank(cards : list[Card]):
 
 	return groups
 
+def group_by_suit(cards : list[Card]):
+
+	by_suit = defaultdict(list)
+
+	for card in cards:
+		by_suit[card.suit].append(card)
+
+	groups = list(by_suit.values())
+
+	return groups
+
 
 def is_straight(cards : list[Card], run_length : int = 5):
 	# Filter list to only distinct ranks, as a straight does not care if there are repeated ranks.

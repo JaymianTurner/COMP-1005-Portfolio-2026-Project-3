@@ -29,14 +29,16 @@ class HighCard(HandType):
 	level_chips, level_mult = 10, 1
 
 	def evaluate(cards : list[Card]) -> list[Card] | None:
+		if cards == []: return
 		sorted_cards = sorted(cards, key=lambda c: c.rank)
-		return sorted_cards[0]
+		return [sorted_cards[0]]
 
 class Pair(HandType):
 	name, base_chips, base_mult = "Pair", 10, 2
 	level_chips, level_mult = 15, 1
 
 	def evaluate(cards : list[Card]) -> list[Card] | None:
+		if cards == []: return
 		groups = helpers.group_by_rank(cards)
 
 		if groups and len(groups[0]) >= 2:
@@ -48,6 +50,7 @@ class TwoPair(HandType):
 	level_chips, level_mult = 20, 1
 
 	def evaluate(cards : list[Card]) -> list[Card] | None:
+		if cards == []: return
 		groups = helpers.group_by_rank(cards)
 		pairs = [g for g in groups if len(g) >= 2]
 
@@ -61,6 +64,7 @@ class ThreeOfAKind(HandType):
 	level_chips, level_mult = 20, 2
 
 	def evaluate(cards : list[Card]) -> list[Card] | None:
+		if cards == []: return
 		groups = helpers.group_by_rank(cards)
 
 		if groups and len(groups[0]) >= 3:
@@ -72,6 +76,7 @@ class Straight(HandType):
 	level_chips, level_mult = 30, 3
 
 	def evaluate(cards : list[Card], run_length=5) -> list[Card] | None:
+		if cards == []: return
 		return helpers.is_straight(cards, run_length)
 
 class Flush(HandType):
@@ -79,16 +84,21 @@ class Flush(HandType):
 	level_chips, level_mult = 15, 2
 
 	def evaluate(cards : list[Card], run_length : int = 5) -> list[Card] | None:
-		pass
+		if cards == []: return
+		groups = helpers.group_by_suit(cards)
+
+		return next((suit for suit in groups if len(suit) >= run_length), None)
+
 
 class FullHouse(HandType):
 	name, base_chips, base_mult = "Full House", 40, 4
 	level_chips, level_mult = 25, 2
 
 	def evaluate(cards : list[Card]) -> list[Card] | None:
+		if cards == []: return
 		groups = helpers.group_by_rank(cards)
 
-		if groups and len(groups[0]) >= 3 and len(groups[1]) >= 2:
+		if groups and len(groups[0]) >= 3 and len(groups) > 1 and len(groups[1]) >= 2:
 			return groups[0][:3] + groups[1][:2] 
 		else: return None
 
@@ -97,6 +107,7 @@ class FourOfAKind(HandType):
 	level_chips, level_mult = 30, 3
 
 	def evaluate(cards : list[Card]) -> list[Card] | None:
+		if cards == []: return
 		groups = helpers.group_by_rank(cards)
 
 		if groups and len(groups[0]) >= 4:
@@ -108,13 +119,9 @@ class StraightFlush(HandType):
 	level_chips, level_mult = 40, 4
 
 	def evaluate(cards : list[Card], run_length : int = 5) -> list[Card] | None:
+		if cards == []: return
 		pass
 
-class FiveOfAKind(HandType): pass
-class FlushHouse(HandType): pass
-class FlushFive(HandType): pass
-
-# testing
-cards = [Card(10, Card.SPADES), Card(9, Card.CLUBS), Card(7, Card.SPADES), Card(8, Card.HEARTS), Card(6, Card.SPADES)]
-for card in Straight.evaluate(cards) or []:
-	print(card)
+# class FiveOfAKind(HandType): pass
+# class FlushHouse(HandType): pass
+# class FlushFive(HandType): pass
