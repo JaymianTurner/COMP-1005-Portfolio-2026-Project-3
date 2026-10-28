@@ -35,6 +35,9 @@ ante_requirements : dict[int, int] = {
 def fmt(n) -> str:
 	return str(int(n)) if n == int(n) else f"{n:.2f}".rstrip("0")
 
+def vis_len(s : str) -> int:
+	return len(_ANSI.sub("", s))
+
 def popup_text(event) -> str:
 	n = fmt(event.amount)
 	match event.kind:
@@ -73,7 +76,7 @@ class Round:
 		active = event.source if event else None
 
 		card_str = [str(c) for c in hand.cards]
-		card_str_len = [len(c) for c in card_str]
+		card_str_len = [vis_len(c) for c in card_str]
 
 		top_card_row, bottom_card_row = [], []
 		for i, (card, text, width) in enumerate(zip(hand.cards, card_str, card_str_len)):
@@ -224,7 +227,7 @@ class Round:
 		held = [c for i, c in enumerate(cards) if i not in self.__selected_indexes]
 
 		level = self.__game.hand_type_levels[h_type.name]
-		ctx = ScoreContext(scoring, held, h_type, level, self.__game.jokers, on_event=self.__on_score_event)
+		ctx = ScoreContext(self.__game, scoring, held, h_type, level, self.__game.jokers, self.__hands, self.__discards, on_event=self.__on_score_event)
 
 		self.__hands -= 1
 		self.__info_select_card = -1
@@ -247,13 +250,14 @@ class Round:
 		cards = self.__hand.cards
 		for c in [cards[i] for i in sorted(self.__selected_indexes)]:
 			cards.remove(c)
+
 		self.__selected_indexes.clear()
 		self.__info_select_card = -1
 		self.__discards -= 1
 		self.__hand.fill_hand()
 		self.__hand.sort_rank()
 
-	def __on_score_event(self, ctx : ScoreContext, event : ScoreEvent, ):
+	def __on_score_event(self, ctx : ScoreContext, event : ScoreEvent):
 		self.display(ctx, event)
 		sleep(STEP_TIME)
 

@@ -10,13 +10,20 @@ class ScoreEvent:
 ScoreListener = Callable[["ScoreContext", ScoreEvent], None]
 
 class ScoreContext:
-	def __init__(self, scoring_cards : list, held_cards : list, h_type, h_type_lvl : int,
-	             jokers : list, on_event : ScoreListener | None = None):
+	def __init__(self, game, scoring_cards : list, held_cards : list, h_type, h_type_lvl : int,
+	             jokers : list, hands : int, discards : int, on_event : ScoreListener | None = None):
 		
 		self.scoring_cards = scoring_cards
 		self.held_cards = held_cards
+
 		self.hand_type = h_type
+
 		self.jokers = list(jokers)
+		self.joker_max = game.joker_max
+
+		self.hands = hands
+		self.discards = discards
+
 		self.on_event = on_event
 
 		extra_levels = h_type_lvl - 1

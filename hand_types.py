@@ -42,7 +42,7 @@ class Pair(HandType):
 		groups = helpers.group_by_rank(cards)
 
 		if groups and len(groups[0]) >= 2:
-			return groups[0][:2] 
+			return groups[0][:2]
 		else: return None
 
 class TwoPair(HandType):
@@ -56,8 +56,11 @@ class TwoPair(HandType):
 
 		if len(pairs) < 2:
 			return None
-		
-		return pairs[0][:2] + pairs[1][:2]
+
+		if pairs[0][0].rank > pairs[1][0].rank:
+			return pairs[0][:2] + pairs[1][:2]
+		else:
+			return pairs[1][:2] + pairs[0][:2]
 
 class ThreeOfAKind(HandType):
 	name, base_chips, base_mult = "Three Of A Kind", 30, 3
@@ -99,7 +102,10 @@ class FullHouse(HandType):
 		groups = helpers.group_by_rank(cards)
 
 		if groups and len(groups[0]) >= 3 and len(groups) > 1 and len(groups[1]) >= 2:
-			return groups[0][:3] + groups[1][:2] 
+			if groups[0][0].rank > groups [1][0].rank:
+				return groups[0][:3] + groups[1][:2] 
+			else:
+				return groups[1][:2] + groups[0][:3]
 		else: return None
 
 class FourOfAKind(HandType):

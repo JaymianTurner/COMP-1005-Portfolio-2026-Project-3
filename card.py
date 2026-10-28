@@ -1,5 +1,14 @@
 class Card:
 
+	SUIT_COL = {
+	1 : "\x1b[38;2;91;110;225m",
+	2 : "\x1b[38;2;55;120;57m",
+	3 : "\x1b[38;2;244;23;83m",
+	4 : "\x1b[38;2;240;89;37m"
+	}
+
+	FG = "\x1b[39m"
+
 	# Suit constants for instantiating cards.
 	# e.g. card = Card(1, Card.SPADES)
 	SPADES, CLUBS, HEARTS, DIAMONDS = 1, 2, 3, 4
@@ -41,11 +50,13 @@ class Card:
 
 	def __str__(self):
 		rank_name = self.rank if self.rank < 11 else self.RANK_NAME[self.rank]
-		return f"{rank_name}{self.SUIT_NAME[self.suit]}"
+		return f"{self.SUIT_COL[self.suit]}{rank_name}{self.SUIT_NAME[self.suit]}{self.FG}"
 
 	def get_long_name(self) -> str:
 		return f"{self.RANK_NAME_LONG[self.rank]} of {self.SUIT_NAME_LONG[self.suit]}"
 	long_name = property(get_long_name)
+
+	def is_face_card(self) -> bool: return (self.rank > 10 and self.rank < 14)
 
 	def modifiers(self):
 		return [m for m in (self.enhancement, self.edition, self.seal) if m]

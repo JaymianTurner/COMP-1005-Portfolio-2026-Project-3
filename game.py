@@ -1,5 +1,5 @@
 from deck import Deck
-import modifier
+import modifier as j
 import hand_types
 
 class Game:
@@ -10,7 +10,7 @@ class Game:
 
 		self.deck = Deck()
 
-		self.__jokers : list = [modifier.GreedyJoker()]
+		self.__jokers : list = [j.Jimbo(), j.BusinessCard(), j.StencilJoker()]
 		self.joker_max : int = 5
 
 		self.__consumables : list = []
@@ -50,8 +50,8 @@ class Game:
 		pass
 
 	def remove_consumable(self, i : int, sell = True):
-			try:
-				if sell: self.__money += self.__consumables[i].value / 2
-				del self.__consumables[i]
-			except: return
+		try:
+			if sell: self.__money += self.__consumables[i].value / 2
+			del self.__consumables[i]
+		except: return
 

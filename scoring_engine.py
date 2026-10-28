@@ -8,6 +8,8 @@ class ScoringEngine:
 		ctx.source = None
 		ctx.emit("hand")
 
+
+
 		for card in ctx.scoring_cards:
 			ScoringEngine.__trigger(ctx, card, ScoringEngine.__score_card, "retriggers")
 
@@ -27,9 +29,9 @@ class ScoringEngine:
 	def __trigger(ctx, card, effect, retrigger_method : str):
 		retriggers = []
 		for m in card.modifiers():
-			retriggers += [card] * getattr(m, retrigger_method)(ctx, card)
+			retriggers += [card] * getattr(m, retrigger_method, 0)(ctx, card)
 		for j in ctx.jokers:
-			retriggers += [j] * getattr(j, retrigger_method)(ctx, card)
+			retriggers += [j] * getattr(j, retrigger_method, 0)(ctx, card)
 
 		effect(ctx, card)
 		for i in retriggers:
